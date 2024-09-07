@@ -1,6 +1,8 @@
 import { Maskito } from '@maskito/core'
 import {maskitoTimeOptionsGenerator, maskitoWithPlaceholder} from '@maskito/kit';
 
+window.scrollY = 0;
+
 /* -- COMMON -- */
 
 const secondsToMilicere = (seconds: number) => seconds / 0.864
@@ -33,25 +35,31 @@ const currentQonkTime = () => {
 const timeKwang = document.getElementById('time-Kwng')!
 const timeLatin = document.getElementById('time-Latn')!
 
-setInterval(() => {
+const setQonkTime = () => {
     const { cere, milicere } = currentQonkTime()
     const cereStr = cere.toString().padStart(2, '0')
     const milicereStr = milicere.toString().padStart(3, '0')
     const timeStr = `${cereStr}:${milicereStr}`
     timeKwang.textContent = timeStr
     timeLatin.textContent = timeStr
-}, 864) // once every milicere
+}
+
+setInterval(setQonkTime, 864) // once every milicere
+setQonkTime()
 
 const currentBrowserTimeEl = document.getElementById('current-browser-time')!
 
-setInterval(() => {
+const browserTimeTimer = () => {
     const now = new Date()
     const hours = now.getHours().toString().padStart(2, '0')
     const minutes = now.getMinutes().toString().padStart(2, '0')
     const seconds = now.getSeconds().toString().padStart(2, '0')
     const timeStr = `${hours}:${minutes}:${seconds}`
     currentBrowserTimeEl.textContent = timeStr
-}, 1000)
+}
+
+setInterval(browserTimeTimer, 1000)
+browserTimeTimer()
 
 /* -- PANEL MANAGEMENT -- */
 
@@ -103,6 +111,29 @@ window.addEventListener('wheel', event => {
     }
 })
 
+let touchstartY = 0
+let touchendY = 0
+    
+function checkDirection() {
+  if (touchendY < touchstartY) {
+    // swipe up
+    toToolsPanel()
+  }
+  if (touchendY > touchstartY) {
+    // swipe down
+    toTimePanel()
+  }
+}
+
+document.addEventListener('touchstart', e => {
+  touchstartY = e.changedTouches[0].screenY
+})
+
+document.addEventListener('touchend', e => {
+  touchendY = e.changedTouches[0].screenY
+  checkDirection()
+})
+
 
 /* -- TIME CONVERSION -- */
 
@@ -120,18 +151,23 @@ const normalOptions = maskitoTimeOptionsGenerator({
 
 new Maskito(normalInput, normalOptions)
 
-const metricInputTimer = setInterval(() => {
+const setMetricInput = () => {
+
     const { cere, milicere } = currentQonkTime()
     const cereStr = cere.toString().padStart(2, '0')
     const milicereStr = milicere.toString().padStart(3, '0')
     const timeStr = `${cereStr}:${milicereStr}`
 
     metricInput.value = timeStr
-}, 864)
+}
 
-const normalInputTimer = setInterval(() => {
+const metricInputTimer = setInterval(setMetricInput, 864) // once every milicere
+
+const setNormalInput = () => {
     normalInput.value = new Date().toLocaleTimeString('en-US', { hour12: false })
-})
+}
+
+const normalInputTimer = setInterval(setNormalInput, 1000)
 
 metricInput.addEventListener('focus', () => {
     clearInterval(metricInputTimer)
