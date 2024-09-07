@@ -1,17 +1,18 @@
 import { Maskito } from '@maskito/core'
-import {maskitoTimeOptionsGenerator} from '@maskito/kit';
+import {maskitoTimeOptionsGenerator, maskitoWithPlaceholder} from '@maskito/kit';
 
 /* -- COMMON -- */
 
 const secondsToMilicere = (seconds: number) => seconds / 0.864
-
-/* -- CURRENT TIME -- */
+const milicereToSeconds = (milicere: number) => milicere * 0.864
 
 const startOfToday = () => {
     const now = new Date()
     now.setHours(0, 0, 0, 0)
     return now
 }
+
+/* -- CURRENT TIME -- */
 
 const secondsSinceStartOfToday = () => {
     const now = +new Date()
@@ -108,15 +109,63 @@ window.addEventListener('wheel', event => {
 const metricInput = document.getElementById('metric-input')! as HTMLInputElement
 const normalInput = document.getElementById('normal-input')! as HTMLInputElement
 
-document.addEventListener('DOMContentLoaded', () => {
-    new Maskito(metricInput, {
-        mask: [/\d/, /\d/, ':', /\d/, /\d/, /\d/],
-    })
-
-    const normalOptions = maskitoTimeOptionsGenerator({
-	    mode: 'HH:MM:SS',
-	});
-    
-    new Maskito(normalInput, normalOptions)
+new Maskito(metricInput, {
+    ...maskitoWithPlaceholder('00:000'),
+    mask: [/\d/, /\d/, ':', /\d/, /\d/, /\d/],
 })
 
+const normalOptions = maskitoTimeOptionsGenerator({
+    mode: 'HH:MM:SS',
+});
+
+new Maskito(normalInput, normalOptions)
+
+const metricInputTimer = setInterval(() => {
+    const { cere, milicere } = currentQonkTime()
+    const cereStr = cere.toString().padStart(2, '0')
+    const milicereStr = milicere.toString().padStart(3, '0')
+    const timeStr = `${cereStr}:${milicereStr}`
+
+    metricInput.value = timeStr
+}, 864)
+
+const normalInputTimer = setInterval(() => {
+    normalInput.value = new Date().toLocaleTimeString('en-US', { hour12: false })
+})
+
+metricInput.addEventListener('focus', () => {
+    clearInterval(metricInputTimer)
+    clearInterval(normalInputTimer)
+})
+
+metricInput.addEventListener('input', () => {
+    const value = metricInput.value
+    const [cere, milicere] = value.split(':').map(Number)
+    const totalMilicere = (cere * 1000) + milicere
+    const seconds = milicereToSeconds(totalMilicere)
+
+    const time = new Date()
+    time.setHours(0, 0, seconds, 0)
+    
+    normalInput.value = time.toLocaleTimeString('en-US', { hour12: false })
+
+    clearInterval(metricInputTimer)
+    clearInterval(normalInputTimer)
+})
+
+normalInput.addEventListener('focus', () => {
+    clearInterval(metricInputTimer)
+    clearInterval(normalInputTimer)
+})
+
+normalInput.addEventListener('input', () => {
+    const value = normalInput.value
+    const [hours, minutes, seconds] = value.split(':').map(Number)
+    const secondsSinceMidnight = (hours * 3600) + (minutes * 60) + seconds
+    const cere = Math.floor(secondsSinceMidnight / 1000)
+    const milicere = secondsSinceMidnight % 1000
+    metricInput.value = `${cere.toString().padStart(2, '0')}:${milicere.toString().padStart(3, '0')}`
+
+    clearInterval(metricInputTimer)
+    clearInterval(normalInputTimer)
+})

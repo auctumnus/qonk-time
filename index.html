@@ -6,7 +6,7 @@
         <link rel="preload" href="MonospaceNumerals.woff2" as="font" type="font/woff2" crossorigin>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=block" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=block&text=01234567890:" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="./src/style.css">
         <meta charset="utf-8">
     </head>
@@ -17,7 +17,7 @@
             </div>
             <div class="panel-center">
                 <p>
-                    The time is currently:
+                    The time is currently
                 </p>
                 <div class="time" id="time-Kwng">00:000</div>
                 <div class="time" id="time-Latn">00:000</div>
@@ -38,16 +38,25 @@
             </div>
             <div class="panel-center">
                 <p>
-                    Convert between metric and standard time:
+                    Convert between metric and standard time
                 </p>
                 <div class="conversion">
-                    <label for="normal-input">Standard time:</label>
-                    <input type="text" id="normal-input" placeholder="HH:MM:SS">
-                    <label for="metric-input">Metric time:</label>
-                    <input type="text" id="metric-input" placeholder="CC:MMM">
+                    <label>
+                        <span>Standard time</span>
+                        <input type="text" id="normal-input">
+                    </label>
+                    
+                    <label>
+                        <span>Metric time</span>
+                        <input type="text" id="metric-input">
+                    </label>
                 </div>
             </div>
             <div class="panel-bottom">
+                <a href="https://github.com/auctumnus/qonktime" class="icon-link">
+                    <img src="/github-mark.svg" alt="GitHub logo" class="light-mode-only">
+                    <img src="/github-mark-white.svg" alt="GitHub logo" class="dark-mode-only">
+                </a>
             </div>        
     </body>
 </html>
