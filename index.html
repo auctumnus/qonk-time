@@ -2,26 +2,52 @@
 <html>
     <head>
         <title>Metric clock</title>
+        <script src="src/index.ts" type="module" defer></script>
         <link rel="preload" href="MonospaceNumerals.woff2" as="font" type="font/woff2" crossorigin>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=block" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" type="text/css" href="./src/style.css">
         <meta charset="utf-8">
-        <script src="index.js" defer></script>
     </head>
     <body>
-        <noscript>This app needs Javascript to be enabled.</noscript>
-        <p>
-            The time is currently:
-        </p>
-        <div class="time" id="time-Kwng">00:000</div>
-        <div class="time" id="time-Latn">00:000</div>
-        <p>
-            (using your browser's time zone)
-        </p>
-        <p>
-            Learn more at the <a href="https://abzu.w.kmwc.org/w/Metric_time">Abzû wiki</a>
-        </p>
+        <div class="current-time panel">
+            <div class="panel-top">
+                <noscript>This app needs Javascript to be enabled.</noscript>
+            </div>
+            <div class="panel-center">
+                <p>
+                    The time is currently:
+                </p>
+                <div class="time" id="time-Kwng">00:000</div>
+                <div class="time" id="time-Latn">00:000</div>
+                <p>
+                    (using your browser's time zone, where it is <span id="current-browser-time"></span>)
+                </p>
+                <p>
+                    Learn more at the <a href="https://abzu.w.kmwc.org/w/Metric_time">Abzû wiki</a>
+                </p>
+            </div>
+            <div class="panel-bottom">
+                <button id="to-tools">Time conversion tools</button>
+            </div>
+        </div>
+        <div class="conversion-tools panel hidden">
+            <div class="panel-top">
+                <button id="to-time">Current time</button>
+            </div>
+            <div class="panel-center">
+                <p>
+                    Convert between metric and standard time:
+                </p>
+                <div class="conversion">
+                    <label for="normal-input">Standard time:</label>
+                    <input type="text" id="normal-input" placeholder="HH:MM:SS">
+                    <label for="metric-input">Metric time:</label>
+                    <input type="text" id="metric-input" placeholder="CC:MMM">
+                </div>
+            </div>
+            <div class="panel-bottom">
+            </div>        
     </body>
 </html>
