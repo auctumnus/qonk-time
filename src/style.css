@@ -14,7 +14,7 @@
     --fg1\.5: #1a1f2e;
     --fg2: #64748b;
 
-    --link: rgb(14 165 233);
+    --link: rgb(2 123 186);
 
     --curve: cubic-bezier(0.2, 0.0, 0, 1.0);
 }
@@ -120,12 +120,10 @@ html, body {
 a, a:visited {
     color: var(--link);
     transition: opacity .1s var(--curve);
-    text-decoration: none;
 }
 
 a:hover {
     opacity: 0.8;
-    text-decoration: underline;
 }
 
 button {
